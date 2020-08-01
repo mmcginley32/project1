@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>weather trips</title>
+    <title>Weather Trips</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="./Assets/style.css" />
+        <link
+        rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+        crossorigin="anonymous" />
 </head>
 <body>
-    
+    <section id="route-form">
+        <form class="form-inline">
+            <div class="form-group mx-sm-3 mb-2">
+                <input class="form-control" id="start-city" type="text" placeholder="Starting City Name">
+                <input class="form-control" id="end-city" type="text" placeholder="Ending City Name">
+                <button type="submit" class="btn btn-primary" id="route">
+                    <i class="fas fa-car-side" style="font-size: large;"> Route</i>
+                </button>
+                <input class="form-control" id="stop-city" type="text" placeholder="City Name to stop in">
+                <button type="submit" class="btn btn-primary" id="add"> 
+                    <i class="fas fa-hamburger" style="font-size: large;"> Add Stop</i>
+                </button>
+            </div>
+        </form>
+    </section>
 </body>
 </html>
