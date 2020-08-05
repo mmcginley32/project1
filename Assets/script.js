@@ -1,0 +1,83 @@
+
+//create empty arrays for input values selected by user 
+let startCity = []; 
+let endCity = []; 
+let stopCity = []; 
+console.log(startCity, endCity, stopCity);
+
+// //create variables that will pull in the selected values of user input for start, end and stop-in city 
+let inputStart = document.getElementById('start-city').val; 
+let inputEnd = document.getElementById('end-city').val;
+let inputStop = document.getElementById('stop-city').val; 
+console.log(inputStart, inputEnd, inputStop); 
+
+//code functionality that will execute once the route or add stop buttons are clicked 
+let addStart = (ev) => {
+  ev.preventDefault(); //prevents the form from submitting 
+
+  inputStart = document.getElementById('start-city').value; //lines 17-19: grabbing  user input values and assigning them to variables 
+  inputEnd = document.getElementById('end-city').value; 
+  inputStop = document.getElementById('stop-city').value; 
+
+  startCity.push(inputStart); //lines 20-22: appending user input values to empty arrays in lines 4-6
+  endCity.push(inputEnd); 
+  stopCity.push(inputStop); 
+
+  document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
+
+  console.log('Added:' , startCity); //console logging array values 
+  console.log('Added:', endCity); 
+  console.log('Added:', stopCity); 
+
+  // let selectedStart = document.querySelector('createcontainer'); do we want to have selected cities for start, end, stop in appear on the page?
+  // selectedStart.textContent = (startCity); 
+
+  //locally storing input values and end of addStart execution 
+  localStorage.setItem('startCity', JSON.stringify(startCity) ); 
+  localStorage.setItem('endCity', JSON.stringify(endCity) ); 
+  localStorage.setItem('stopcity', JSON.stringify(stopCity) ); 
+}
+
+
+//add event listener for route and passing through the function addStart
+document.addEventListener('DOMContentLoaded', ()=> {
+  document.getElementById('route').addEventListener('click', addStart);
+});
+
+//add event listener for add and passing through the function addStart
+document.addEventListener('DOMContentLoaded', ()=> {
+  document.getElementById('add').addEventListener('click', addStart);
+});
+
+//add event 
+$('.btn-primary').on('click', function() {
+  var startAPI = $('#start-city').val(); 
+  var endAPI = $('#end-city').val(); 
+  var stopAPI = $('#stop-city').val(); 
+  searchTrip (startAPI, endAPI, stopAPI); 
+  console.log(startAPI, endCity, stopAPI); 
+});
+
+
+//Function to execute the API call once buttons are clicked 
+function searchTrip(startAPI, endAPI, stopAPI) {
+      var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + endAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
+  //  var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + startAPI + '&' + endCity + '&' + stopAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
+
+$.ajax ({
+    url: queryURL,
+    method: "GET"
+  }).then(function(response) {
+    console.log(response);
+    $("#end-city").text(JSON.stringify(response)); 
+
+  }); 
+};
+
+
+
+
+
+
+
+
