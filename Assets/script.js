@@ -94,7 +94,16 @@ $.ajax ({
 
 
 
+//returnCurrentWeather("Toronto");
+//returnSearchTrip("Toronto");
 
+//$("#submit").click(function() {
+//    event.preventDefault();
+//    let cityName = $("#start-city").val();
+//    let cityName2 = $("#stop-city").val();
+//    returnCurrentWeather(cityName, cityName2);
+//    returnSearchTrip(cityName, cityName2);
+//});
 
 
 
