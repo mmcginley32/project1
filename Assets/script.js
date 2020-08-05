@@ -4,6 +4,7 @@ var currWeatherDiv = $("#");
 var forecastDiv = $("#");
 var citiesArray;
 
+
 function returnCurrentWeather(cityName) {
      let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;;
 
