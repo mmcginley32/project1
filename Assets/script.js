@@ -5,7 +5,7 @@ var forecastDiv = $("#");
 var citiesArray;
 
 function returnCurrentWeather(cityName) {
-    let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&APPID=${apiKey}`;
+     let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;;
 
     $.get(queryURL).then(function(response){
         let currTime = new Date(response.dt*1000);
@@ -18,12 +18,8 @@ function returnCurrentWeather(cityName) {
         createHistoryButton(response.name);
     })
 };
-if (localStorage.getItem("localWeatherSearches")) {
-    citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches"));
-    writeSearchHistory(citiesArray);
-} else {
-    citiesArray = [];
-};
+    citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches")) || [];
+
 
 
 //create empty arrays for input values selected by user 
@@ -32,23 +28,16 @@ let endCity = $("#end-city");
 let stopCity =$("#stop-city");
 console.log(startCity, endCity, stopCity);
 
-// //create variables that will pull in the selected values of user input for start, end and stop-in city 
-let inputStart = document.getElementById('start-city').val; 
-let inputEnd = document.getElementById('end-city').val;
-let inputStop = document.getElementById('stop-city').val; 
-console.log(inputStart, inputEnd, inputStop); 
+
 
 //code functionality that will execute once the route or add stop buttons are clicked 
 let addStart = (ev) => {
   ev.preventDefault(); //prevents the form from submitting 
 
-  inputStart = document.getElementById('start-city').value; //lines 17-19: grabbing  user input values and assigning them to variables 
-  inputEnd = document.getElementById('end-city').value; 
-  inputStop = document.getElementById('stop-city').value; 
-
-  startCity.push(inputStart); //lines 20-22: appending user input values to empty arrays in lines 4-6
-  endCity.push(inputEnd); 
-  stopCity.push(inputStop); 
+  let inputStart = document.getElementById('start-city').value; //lines 17-19: grabbing  user input values and assigning them to variables 
+  let inputEnd = document.getElementById('end-city').value; 
+  let inputStop = document.getElementById('stop-city').value; 
+ 
 
   document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
 
@@ -81,14 +70,14 @@ $('.btn-primary').on('click', function() {
   var startAPI = $('#start-city').val(); 
   var endAPI = $('#end-city').val(); 
   var stopAPI = $('#stop-city').val(); 
-  searchTrip (startAPI, endAPI, stopAPI); 
+  searchTrip (startAPI, endAPI,stopAPI); 
   console.log(startAPI, endCity, stopAPI); 
 });
 
 
 //Function to execute the API call once buttons are clicked 
-function searchTrip(startAPI, endAPI, stopAPI) {
-      var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + endAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
+function searchTrip(cityAPI) {
+      var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
   //  var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + startAPI + '&' + endCity + '&' + stopAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
 
 $.ajax ({
