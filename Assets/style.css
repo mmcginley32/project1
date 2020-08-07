@@ -1,3 +1,4 @@
+
 h1{
     font-family:'Amatic SC', cursive;
     text-align: center;
@@ -12,6 +13,7 @@ h1{
     justify-content: center;
     padding: 20px;
 }
+
 body { 
     background-image: url(https://s1.1zoom.me/big0/244/USA_Roads_Forests_Autumn_Michigan_536718_1280x853.jpg);
     background-repeat: no-repeat;
