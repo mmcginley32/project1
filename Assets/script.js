@@ -4,7 +4,7 @@ var currWeatherDiv = $("#");
 var forecastDiv = $("#");
 var citiesArray;
 
-function returnCurrentWeather(cityName) {
+function returnCurrentWeather(coordinates) {
      let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;;
 
     $.get(queryURL).then(function(response){
@@ -74,7 +74,7 @@ $('.btn-primary').on('click', function() {
   console.log(startAPI, endCity, stopAPI); 
 });
 
-
+/*
 //Function to execute the API call once buttons are clicked 
 function searchTrip(cityAPI) {
       var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
@@ -86,9 +86,17 @@ $.ajax ({
   }).then(function(response) {
     console.log(response);
     $("#end-city").text(JSON.stringify(response)); 
-
+    returnCurrentWeather();
   }); 
 };
+*/
+
+$(document).ready(function() {
+    $('<div>').class('card').on("click", function (){
+        
+    });
+}); 
+
 
 
 
@@ -99,11 +107,11 @@ $.ajax ({
 //$("#submit").click(function() {
 //    event.preventDefault();
 //    let cityName = $("#start-city").val();
-//    let cityName2 = $("#stop-city").val();
+//    let cityName2 = $("#end-city").val();
 //    returnCurrentWeather(cityName, cityName2);
 //    returnSearchTrip(cityName, cityName2);
 //});
 
-
+//*add another button for stop city
 
 // 0d67df869da6450e2d0d3147f8e85294701ac392
