@@ -97,9 +97,9 @@ for (var i = 0; i < citiesArray.length; i++) {
 
     var card = document.createElement("card");
     card.textContent = city;
-    .appendChild(card);
-  }
-}
+    tbody.appendChild(card);
+  };
+
 
 
 
