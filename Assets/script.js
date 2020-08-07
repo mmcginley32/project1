@@ -54,11 +54,12 @@ function returnCurrentWeather(cityName) {
  
     
 
-// // //create variables that will bring in the input values selected by user 
-// // let startCity = $("#start-city"); 
-// // let endCity = $("#end-city"); 
-// // let stopCity =$("#stop-city");
-// // console.log(startCity, endCity, stopCity); //logging to make sure code is functioning 
+    for (var i = 0; i < citiesArray.length; i++) {
+      var city = citiesArray[i];
+      var card = document.createElement("card");
+      card.textContent = city;
+      tbody.appendChild(card);
+    };
 
 
 
