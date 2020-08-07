@@ -1,70 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Trips</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-        <link
-        rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-        crossorigin="anonymous" />
-        
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="./Assets/style.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <section id="route-form">
-        <form class="form-inline">
-            <div class="form-group mx-sm-3 mb-2">
-                <input class="form-control" id="start-city" type="text" placeholder="Starting City Name">
-                <input class="form-control" id="end-city" type="text" placeholder="Ending City Name">
-                <button type="submit" class="btn btn-primary" id="route">
-                    <i class="fas fa-car-side" style="font-size: large;"> Route</i>
-                </button>
-                <input class="form-control" id="stop-city" type="text" placeholder="City Name to stop in">
-                <button type="submit" class="btn btn-primary" id="add"> 
-                    <i class="fas fa-hamburger" style="font-size: large;"> Add Stop</i>
-                </button>
-            </div>
-        </form>
-    </section>
-    <div>
-        <div class= "content">
-            <title>Map</title>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d196281.64169563106!2d-104.85511145!3d39.764338949999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1596309033723!5m2!1sen!2sus" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-        </div>
-    </div>
 
-    <div>
-        <div class= "weather-table">
-            <table>
-                <thead>
-                    <tr>
-                    <th><b>Location</b></th>
-                    <th><b>Time</b></th>
-                    <th><b>Weather</b></th>
-                    </tr>
+<body>
+    <div class="wrapper">
+        <h1><b>Weather Trips</b></h1>
+        <section id="route-form">
+            <form class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input class="form-control" id="start-city" type="text" placeholder="Starting City Name">
+                    <input class="form-control" id="end-city" type="text" placeholder="Ending City Name">
+                    <button type="submit" class="btn btn-primary" id="route">
+                        <i class="fas fa-car-side" style="font-size: large;"> Route</i>
+                    </button>
+                    <input class="form-control" id="stop-city" type="text" placeholder="City Name to stop in">
+                    <button type="submit" class="btn btn-primary" id="add">
+                        <i class="fas fa-hamburger" style="font-size: large;"> Add Stop</i>
+                    </button>
+                </div>
+            </form>
+        </section>
+        <div id="page">
+            <title>Map</title>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d196281.64169563106!2d-104.85511145!3d39.764338949999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1596309033723!5m2!1sen!2sus"
+                width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
+                tabindex="0"></iframe>
+        </div>
+        <div id="table" cellpadding="10" cellspacing="5">
+            <table class="table">
+                <div class="col">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">City</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Weather</th>
+                        </tr>
                     </thead>
-                    <hr/>
                     <tbody>
                         <tr>
-                            <th>name of destination </th>
-                            <td>00:00</td>
-                            <td>temperature</td>
-                            </tr>
-                            <th>name of destination</th>
-                            <td>00:00</td>
-                            <td>temperature</td>
+                            <th scope="row"></th>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>..</td>
+                            <td>..</td>
+                            <td>..</td>
                         </tr>
                     </tbody>
-            <tfoot></tfoot>
+                </div>
             </table>
         </div>
+        <footer></footer>
     </div>
     <!--Adding JavaScript Links -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript"></script>
-    <script src="assets/script.js"></script> 
+    <script src="assets/script.js"></script>
 </body>
-</html> 
 
+</html>
