@@ -2,7 +2,9 @@
 const apiKey = "0765d126b0f6a7eb158764d733ae5823";
 var currWeatherDiv = $("#");
 var forecastDiv = $("#");
-var citiesArray;
+var citiesArray = ["startCity", "stopCity", "endCity"];
+
+
 
 function returnCurrentWeather(coordinates) {
      let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;;
@@ -19,7 +21,6 @@ function returnCurrentWeather(coordinates) {
     })
 };
     citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches")) || [];
-
 
 
 //create empty arrays for input values selected by user 
@@ -91,11 +92,14 @@ $.ajax ({
 };
 */
 
-$(document).ready(function() {
-    $('<div>').class('card').on("click", function (){
-        
-    });
-}); 
+for (var i = 0; i < citiesArray.length; i++) {
+    var city = citiesArray[i];
+
+    var card = document.createElement("card");
+    card.textContent = city;
+    .appendChild(card);
+  }
+}
 
 
 
