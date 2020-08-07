@@ -95,8 +95,8 @@ $.ajax ({
 for (var i = 0; i < citiesArray.length; i++) {
     var city = citiesArray[i];
 
-    var card = document.createElement("card");
-    card.textContent = city;
+    var card = document.createElement("<div>").setAttribute("card");
+    div.textContent = city;
     tbody.appendChild(card);
   };
 
