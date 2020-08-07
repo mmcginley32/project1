@@ -1,10 +1,12 @@
 
 const apiKey = "0765d126b0f6a7eb158764d733ae5823";
-var currWeatherDiv = $("#");
-var forecastDiv = $("#");
-var citiesArray;
+// var currWeatherDiv = $("<div>");
+// var forecastDiv = $("<div");
+var citiesArray = ["startCity", "stopCity", "endCity"];
 
-function returnCurrentWeather(cityName) {
+
+
+function returnCurrentWeather(coordinates) {
      let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;;
 
     $.get(queryURL).then(function(response){
@@ -19,7 +21,6 @@ function returnCurrentWeather(cityName) {
     })
 };
     citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches")) || [];
-
 
 
 //create empty arrays for input values selected by user 
@@ -74,50 +75,60 @@ $('.btn-primary').on('click', function() {
   console.log(startAPI, endCity, stopAPI); 
 });
 
-
+/*
 //Function to execute the API call once buttons are clicked 
 function searchTrip(cityAPI) {
       var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
   //  var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + startAPI + '&' + endCity + '&' + stopAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
 
-    $.ajax ({
-        url: queryURL,
-        method: "GET"
-    }).then(function(response) {
-        console.log(response);
-        $("#end-city").text(JSON.stringify(response)); 
-
-    }); 
+$.ajax ({
+    url: queryURL,
+    method: "GET"
+  }).then(function(response) {
+    console.log(response);
+    $("#end-city").text(JSON.stringify(response)); 
+    returnCurrentWeather();
+  }); 
 };
+*/
+
+// for (var i = 0; i < citiesArray.length; i++) {
+//     var city = citiesArray[i];
+
+//     var card = document.createElement("card");
+//     card.textContent = city;
+//     tbody.appendChild(card);
+//   };
+
+
 
 
 //////////////////////// Goggle functions //////////////////////////
 
 function initMap() {
     const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 4,
-      
+        zoom: 4,
+    
     });
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer({
-      draggable: true,
-      map,
+        draggable: true,
+        map,
     //   panel: document.getElementById("right-panel")
     });
     directionsRenderer.addListener("directions_changed", () => {
-      computeTotalDistance(directionsRenderer.getDirections());
+        computeTotalDistance(directionsRenderer.getDirections());
     });
     displayRoute(
-      "Boulder, US",
-      "Vail, US",
-      directionsService,
-      directionsRenderer
+        "Boulder, US",
+        "Vail, US",
+        directionsService,
+        directionsRenderer
     );
-  }
+}
 
-  function displayRoute(origin, destination, service, display) {
-    service.route(
-      {
+function displayRoute(origin, destination, service, display) {
+    service.route({
         origin: origin,
         destination: destination,
         waypoints: [
@@ -127,21 +138,21 @@ function initMap() {
         //   {
         //     location: "Idaho Springs, US"
         //   },
-          {
-            location: "Copper, US"
-          }
+            {
+                location: "Copper, US"
+            }
         ],
         travelMode: google.maps.TravelMode.DRIVING,
         avoidTolls: true
-      },
-      (result, status) => {
+    },
+    (result, status) => {
         if (status === "OK") {
-          display.setDirections(result);
-          console.log('result in displayRoute: ', result);
+            display.setDirections(result);
+            console.log('result in displayRoute: ', result);
         } else {
-          alert("Could not display directions due to: " + status);
+            alert("Could not display directions due to: " + status);
         }
-      }
+    }
     );
   }
 
@@ -165,11 +176,11 @@ function initMap() {
 //$("#submit").click(function() {
 //    event.preventDefault();
 //    let cityName = $("#start-city").val();
-//    let cityName2 = $("#stop-city").val();
+//    let cityName2 = $("#end-city").val();
 //    returnCurrentWeather(cityName, cityName2);
 //    returnSearchTrip(cityName, cityName2);
 //});
 
-
+//*add another button for stop city
 
 // 0d67df869da6450e2d0d3147f8e85294701ac392
