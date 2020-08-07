@@ -13,7 +13,7 @@ console.log(startCity, endCity, stopCity); //logging to make sure code is functi
 // var currWeatherDiv = $("#");
 // var forecastDiv = $("#");
 
-//create an array for the start, end and stop city 
+//create an array for the start, end and stop city values  
 var citiesArray = [startCity, endCity, stopCity];
 console.log(citiesArray); 
 
