@@ -70,7 +70,7 @@ $('.btn-primary').on('click', function() {
   var startAPI = $('#start-city').val(); 
   var endAPI = $('#end-city').val(); 
   var stopAPI = $('#stop-city').val(); 
-  searchTrip (startAPI, endAPI,stopAPI); 
+  searchTrip (startAPI); 
   console.log(startAPI, endCity, stopAPI); 
 });
 
@@ -80,14 +80,14 @@ function searchTrip(cityAPI) {
       var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
   //  var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + startAPI + '&' + endCity + '&' + stopAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
 
-$.ajax ({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-    console.log(response);
-    $("#end-city").text(JSON.stringify(response)); 
+    $.ajax ({
+        url: queryURL,
+        method: "GET"
+    }).then(function(response) {
+        console.log(response);
+        $("#end-city").text(JSON.stringify(response)); 
 
-  }); 
+    }); 
 };
 
 
