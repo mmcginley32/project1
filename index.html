@@ -10,7 +10,12 @@
     <link rel="stylesheet" href="./Assets/style.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap" rel="stylesheet"> -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1xprYSpXd0q_yDsJ1W2UGhfl9_YGKU0&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
 </head>
 
 <body>
@@ -31,13 +36,9 @@
                 </div>
             </form>
         </section>
-        <div id="page">
-            <title>Map</title>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d196281.64169563106!2d-104.85511145!3d39.764338949999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1596309033723!5m2!1sen!2sus"
-                width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
-                tabindex="0"></iframe>
-        </div>
+        
+        <div id="map"></div>
+        
         <div id="table" cellpadding="10" cellspacing="5">
             <table class="table">
                 <div class="col">

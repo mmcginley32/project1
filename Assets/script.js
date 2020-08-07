@@ -1,7 +1,7 @@
 
 const apiKey = "b7aeb306de9a1d1d11c8363f3b0a0a25";
 var currWeatherDiv = $("#table");
-var forecastDiv = $("#");
+// var forecastDiv = $("#");
 var citiesArray = ["startCity", "stopCity", "endCity"];
 
 
@@ -71,7 +71,7 @@ $('.btn-primary').on('click', function() {
   var startAPI = $('#start-city').val(); 
   var endAPI = $('#end-city').val(); 
   var stopAPI = $('#stop-city').val(); 
-  searchTrip (startAPI, endAPI,stopAPI); 
+  searchTrip (startAPI); 
   console.log(startAPI, endCity, stopAPI); 
 });
 
@@ -88,7 +88,73 @@ for (var i = 0; i < citiesArray.length; i++) {
 
 
 
+//////////////////////// Goggle functions //////////////////////////
 
+function initMap() {
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 4,
+    
+    });
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer({
+        draggable: true,
+        map,
+    //   panel: document.getElementById("right-panel")
+    });
+    directionsRenderer.addListener("directions_changed", () => {
+        computeTotalDistance(directionsRenderer.getDirections());
+    });
+    displayRoute(
+        "Boulder, US",
+        "Vail, US",
+        directionsService,
+        directionsRenderer
+    );
+}
+
+function displayRoute(origin, destination, service, display) {
+    service.route({
+        origin: origin,
+        destination: destination,
+        waypoints: [
+        //   {
+        //     location: "Golden, US"
+        //   },
+        //   {
+        //     location: "Idaho Springs, US"
+        //   },
+            {
+                location: "Copper, US"
+            }
+        ],
+        travelMode: google.maps.TravelMode.DRIVING,
+        avoidTolls: true
+    },
+    (result, status) => {
+        if (status === "OK") {
+            display.setDirections(result);
+            console.log('result in displayRoute: ', result);
+        } else {
+            alert("Could not display directions due to: " + status);
+        }
+    }
+    );
+  }
+
+  function computeTotalDistance(result) {
+    let total = 0;
+    const myroute = result.routes[0];
+    console.log('result in computeTotalDistance: ', result);
+
+    for (let i = 0; i < myroute.legs.length; i++) {
+      total += myroute.legs[i].distance.value;
+    }
+
+    total = total / 1000;
+    // document.getElementById("total").innerHTML = total + " km";
+  }
+
+  
 //returnCurrentWeather("Toronto");
 //returnSearchTrip("Toronto");
 
