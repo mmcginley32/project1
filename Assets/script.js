@@ -1,4 +1,3 @@
-
 //create variable to hold API key 
 const apiKey = "0765d126b0f6a7eb158764d733ae5823";
 
@@ -7,19 +6,19 @@ const apiKey = "0765d126b0f6a7eb158764d733ae5823";
 let startCity = $("#start-city"); 
 let endCity = $("#end-city"); 
 let stopCity =$("#stop-city");
-console.log(startCity, endCity, stopCity); //logging to make sure code is functioning 
+// console.log(startCity, endCity, stopCity); 
 
 
 // var currWeatherDiv = $("#");
 // var forecastDiv = $("#");
 
 //create an array for the start, end and stop city values  
-var citiesArray = [startCity, endCity, stopCity];
-console.log(citiesArray); 
+// var citiesArray = ["startCity", "endCity", "stopCity"];
+// console.log(citiesArray); 
 
 
-// Click event for route button 
-$("#submit").click(function() {
+// Click event for route button /changed target to updated class name for this specific button 
+$(".btn-primary").click(function() {
   event.preventDefault();
   let cityName = $("#start-city").val();
   let cityName2 = $("#end-city").val();
@@ -27,8 +26,8 @@ $("#submit").click(function() {
   console.log(cityName, cityName2); 
 });
 
-// Click event for add button 
-$("#submit").click(function() {
+// Click event for route button /changed target to updated class name for this specific button 
+$(".btn-secondary").click(function() {
   event.preventDefault();
   let cityName3 = $("#stop-city").val();
   returnCurrentWeather(cityName3);
@@ -36,30 +35,97 @@ $("#submit").click(function() {
 });
 
 
-function returnCurrentWeather(cityName) {
-     let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;
+function returnCurrentWeather(coordinates) {
+  let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;
 
-    $.get(queryURL).then(function(response){
-        let currTime = new Date(response.dt*1000);
-        let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
+ $.get(queryURL).then(function(response){
+     let currTime = new Date(response.dt*1000);
+     let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
 
-        currWeatherDiv.html(`
-        <h2>${response.name}, ${response.sys.country} (${currTime.getMonth()+1}/${currTime.getDate()}/${currTime.getFullYear()})<img src=${weatherIcon} height="70px"></h2>
-        <p>Temperature: ${response.main.temp} &#176;C</p>
-        `)
-        createHistoryButton(response.name);
-    })
+     currWeatherDiv.html(`
+     <h2>${response.name}, ${response.sys.country} (${currTime.getMonth()+1}/${currTime.getDate()}/${currTime.getFullYear()})<img src=${weatherIcon} height="70px"></h2>
+     <p>Temperature: ${response.main.temp} &#176;C</p>
+     `)
+     createHistoryButton(response.name);
+ })
 };
-    citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches")) || [];
+ citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches")) || [];
+
+
+
+
+// function searchTrip(cityAPI) {
+//       var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
+//    var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + startAPI + '&' + endCity + '&' + stopAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
+
+// $.ajax ({
+//     url: queryURL,
+//     method: "GET"
+//   }).then(function(response) {
+//     console.log(response);
+//     $("#end-city").text(JSON.stringify(response)); 
+
+//   }); 
+// };
+
+// / $.ajax ({
+//       url: queryURL,
+//       method: "GET"
+//     }).then(function(response) {
+//       console.log(response);
+//       $("#end-city").text(JSON.stringify(response)); 
+  
+//     }); 
+//   };
+
+// function returnCurrentWeather(coordinates) {
+//   let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;
+
+//  $.get(queryURL).then(function(response){
+//      let currTime = new Date(response.dt*1000);
+//      let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
+
+//      currWeatherDiv.html(`
+//      <h2>${response.name}, ${response.sys.country} (${currTime.getMonth()+1}/${currTime.getDate()}/${currTime.getFullYear()})<img src=${weatherIcon} height="70px"></h2>
+//      <p>Temperature: ${response.main.temp} &#176;C</p>
+//      `)
+//      createHistoryButton(response.name);
+//      console.log(response); // console logging 
+//  })
+// };
+//  citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches")) || [];
  
     
 
-    for (var i = 0; i < citiesArray.length; i++) {
-      var city = citiesArray[i];
-      var card = document.createElement("card");
-      card.textContent = city;
-      tbody.appendChild(card);
-    };
+
+//     for (var i = 0; i < citiesArray.length; i++) {
+//       var city = citiesArray[i];
+//       var card = document.createElement("card");
+//       card.textContent = city;
+//       tbody.appendChild(card);
+//     };
+
+
+    
+    
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
