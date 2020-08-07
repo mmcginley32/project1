@@ -1,7 +1,7 @@
 
-const apiKey = "0765d126b0f6a7eb158764d733ae5823";
-// var currWeatherDiv = $("<div>");
-// var forecastDiv = $("<div");
+const apiKey = "b7aeb306de9a1d1d11c8363f3b0a0a25";
+var currWeatherDiv = $("#table");
+// var forecastDiv = $("#");
 var citiesArray = ["startCity", "stopCity", "endCity"];
 
 
@@ -75,30 +75,15 @@ $('.btn-primary').on('click', function() {
   console.log(startAPI, endCity, stopAPI); 
 });
 
-/*
-//Function to execute the API call once buttons are clicked 
-function searchTrip(cityAPI) {
-      var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
-  //  var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + startAPI + '&' + endCity + '&' + stopAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
 
-$.ajax ({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-    console.log(response);
-    $("#end-city").text(JSON.stringify(response)); 
+for (var i = 0; i < citiesArray.length; i++) {
+    var city = citiesArray[i];
     returnCurrentWeather();
-  }); 
-};
-*/
+    var card = document.createElement("<div>").setAttribute("card");
+    div.textContent = city;
+    tbody.appendChild(card);
+  };
 
-// for (var i = 0; i < citiesArray.length; i++) {
-//     var city = citiesArray[i];
-
-//     var card = document.createElement("card");
-//     card.textContent = city;
-//     tbody.appendChild(card);
-//   };
 
 
 
@@ -173,13 +158,13 @@ function displayRoute(origin, destination, service, display) {
 //returnCurrentWeather("Toronto");
 //returnSearchTrip("Toronto");
 
-//$("#submit").click(function() {
-//    event.preventDefault();
-//    let cityName = $("#start-city").val();
-//    let cityName2 = $("#end-city").val();
-//    returnCurrentWeather(cityName, cityName2);
-//    returnSearchTrip(cityName, cityName2);
-//});
+$("#submit").click(function() {
+    event.preventDefault();
+    let cityName = $("#start-city").val();
+    let cityName2 = $("#end-city").val();
+    returnCurrentWeather(cityName, cityName2);
+    returnSearchTrip(cityName, cityName2);
+});
 
 //*add another button for stop city
 
