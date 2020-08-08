@@ -5,31 +5,29 @@ var citiesArray = JSON.parse(localStorage.getItem("citiesArray")) || [];
 var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
-function returnCurrentWeather(cityName) {
+function getCurrentWeather(cityName) {
     let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},us&units=imperial&APPID=${apiKey}`;
 
     $.get(queryURL).then(function(response){
+        console.log(response);
         let currTime = new Date(response.dt*1000);
         let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
 
-        currWeatherDiv.html(`
+        
+    });
+}
+
+
+function createWeatherCard(cityIndex, time) {
+    
+    currWeatherDiv.html(`
         <h2>${response.name}, ${response.sys.country} (${currTime.getMonth()+1}/${currTime.getDate()}/${currTime.getFullYear()})<img src=${weatherIcon} height="70px"></h2>
-        <p>Temperature: ${response.main.temp} &#176;C</p>
+        <p>Temperature: ${response.main.temp} &#176;F</p>
         <p>Humidity: ${response.main.humidity}%</p>
         <p>Wind Speed: ${response.wind.speed} m/s</p>
         `
-    )});
-}
-/*
-function createWeatherCard(cityIndex, time) {
-    var city = citiesArray[cityIndex];
-    returnCurrentWeather(city);
-    var card = document.createElement("<div>").setAttribute("card");
-    div.textContent = city;
-    tbody.appendChild(card);
+    );
 };
-*/
-
 
 
 $("#route").click(function(event) {
@@ -55,12 +53,11 @@ $("#route").click(function(event) {
     }
 
     //clear stops if start and end are changed
-    citiesArray = [];
+    resetStops();
     
     document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
 
     initMap();
-    
     
 });
 
@@ -73,7 +70,7 @@ $("#add").click(function(event) {
     if (stop !== "") {
         citiesArray.push(stop);
     } else {
-        return alert("You are missing a starting city!")
+        return alert("You are missing a city to stop in!")
     }
 
     document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
@@ -130,15 +127,15 @@ function displayRoute(origin, destination, service, display) {
         destination: destination,
         waypoints: stops,
         // [
-        //   {
-        //     location: "Golden, US"
-        //   },
-        //   {
-        //     location: "Idaho Springs, US"
-        //   },
-            // {
-            //     location: "Denver, US"
-            // }
+        //     {
+        //         location: "Golden, US"
+        //     },
+        //     {
+        //         location: "Idaho Springs, US"
+        //     },
+        //     {
+        //         location: "Denver, US"
+        //     }
         // ],
         travelMode: google.maps.TravelMode.DRIVING,
         avoidTolls: true
@@ -162,13 +159,18 @@ function pullCity(str) {
     return city;
 }
 
+function resetStops() {
+    // reset citiesArray for adding current city
+    citiesArray = [];
+    localStorage.removeItem("citiesArray");
+}
+
 function getLegsWeather(result) {
     console.log('result in getLegsWeather: ', result);
 
     let startTime = moment();
     console.log('startTime: ', startTime);
     
-   
 
     const legs = result.routes[0].legs;
     console.log('legs: ', legs);
@@ -176,12 +178,13 @@ function getLegsWeather(result) {
     
     startCity = pullCity(legs[0].start_address); // trim to just "city, ST" for weather search
     console.log('startCity: ', startCity);
-    
-    // might want to revise local storage here instead of after it's entered so that dragged to citys will be updated
-
+    localStorage.setItem("startCity", startCity);
 
     // Get weather for starting city here ****
+    getCurrentWeather(startCity);
 
+    // reset citiesArray for adding current cities
+    resetStops();
 
     for (let i = 0; i < legs.length; i++) {
         let leg = legs[i];
@@ -220,7 +223,7 @@ function getLegsWeather(result) {
         let stopCity = pullCity(leg.end_address);
 
         // might want to revise local storage here instead of after it's entered so that dragged to citys will be updated
-        if (i = legs.length-1) {
+        if (i === legs.length-1) {
             //save end city
             endCity = stopCity;
             localStorage.setItem("endCity", endCity);
@@ -231,8 +234,7 @@ function getLegsWeather(result) {
         }
 
         //get weather and create the card for stopCity at hrOfTheDay here ******
-        
-        returnCurrentWeather(cityName, hrOfTheDay);
+        getCurrentWeather(stopCity,hrOfTheDay);
         
 
         // add 1 hr to time for stop
