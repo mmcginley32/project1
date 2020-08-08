@@ -44,7 +44,6 @@ function startCurrentWeather(api) {
 
 function endCurrentWeather(api) {
     let queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName2 + '&appid=' + apiKey; 
-    // let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;
     $.ajax ({
     url: queryURL,
     method: "GET"
@@ -52,7 +51,7 @@ function endCurrentWeather(api) {
     $("#end-city").text(JSON.stringify(response)); 
     console.log('response:', response);
 
-//////////////BRING IN API DATA AND APPEND TO HTML/////////////////////////
+/////////////////BRING IN API DATA AND APPEND TO HTML/////////////////////////
   var name = $('<p>').addClass('4').text(response.name); 
   console.log(name);  
 
@@ -71,7 +70,6 @@ function endCurrentWeather(api) {
 
 function stopCurrentWeather(api) {
   let queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName3 + '&appid=' + apiKey; 
-  // let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;
   $.ajax ({
   url: queryURL,
   method: "GET"
@@ -120,29 +118,21 @@ function returnCurrentWeather(coordinates) {
 //  EVENT FOR ROUTE BUTTON //
 $(".btn-primary").click(function() {
   event.preventDefault();
-
   //creating variables to pull in start/end city input ///////////////////ADD IF/ELSE FOR EMPTY VALUES///////////////////
   cityName = $("#start-city").val();
   cityName2 = $("#end-city").val();
   startCurrentWeather(cityName, cityName2);
   endCurrentWeather(cityName3);
-  // citiesArray.push(cityName, cityName2); 
   console.log("Start City:", cityName, "End City:" , cityName2);
 });
 
 // EVENT FOR STOP BUTTON //
 $(".btn-secondary").click(function() {
   event.preventDefault();
-
   cityName3 = $("#stop-city").val();
-  // use another api to get lat and lon based on city user typed
-  // let test = {lat: "34", lon: "-118"} //dummy variable
-  // returnCurrentWeather(test);
    stopCurrentWeather(cityName3);
-  //  citiesArray.push(cityName3);
-  //  console.log("Array:", citiesArray);
    console.log("Stop-in City:", cityName3); 
-  //  console.log("lat & lon:", test);
+ 
 });
 
 
