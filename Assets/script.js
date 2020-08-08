@@ -232,7 +232,7 @@ function getLegsWeather(result) {
 
         //get weather and create the card for stopCity at hrOfTheDay here ******
         
-        createWeatherCard(citiesArray[i]);
+        returnCurrentWeather(cityName, hrOfTheDay);
         
 
         // add 1 hr to time for stop
