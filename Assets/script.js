@@ -148,8 +148,6 @@ function createWeatherCard(cityIndex, time) {
 
 
 
-/////////////////////CLICK EVENT FOR GOOGLE MAPS//////////////////////////
-
 $("#route").click(function(event) {
     event.preventDefault();
 
@@ -189,7 +187,7 @@ $("#add").click(function(event) {
     if (stop !== "") {
         citiesArray.push(stop);
     } else {
-        return alert("You are missing a starting city!") //should this be missing a stop in city?
+        return alert("You are missing a starting city!")
     }
 
     document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
@@ -358,22 +356,5 @@ function getLegsWeather(result) {
     //total = total / 1000;
     // document.getElementById("total").innerHTML = total + " km";
 }
-
-// // 0d67df869da6450e2d0d3147f8e85294701ac392
-
-
-
-
-
-
-
-
-
-//     for (var i = 0; i < citiesArray.length; i++) {
-//       var city = citiesArray[i];
-//       var card = document.createElement("card");
-//       card.textContent = city;
-//       tbody.appendChild(card);
-//     };
 
 // 0d67df869da6450e2d0d3147f8e85294701ac392
