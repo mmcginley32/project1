@@ -6,7 +6,7 @@ var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
 function returnCurrentWeather(cityName) {
-    let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&APPID=${apiKey}`;
+    let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},us&units=imperial&APPID=${apiKey}`;
 
     $.get(queryURL).then(function(response){
         let currTime = new Date(response.dt*1000);
@@ -18,34 +18,8 @@ function returnCurrentWeather(cityName) {
         <p>Humidity: ${response.main.humidity}%</p>
         <p>Wind Speed: ${response.wind.speed} m/s</p>
         `
-    );
-
-
-
-//code functionality that will execute once the route or add stop buttons are clicked 
-let addStart = (ev) => {
-  ev.preventDefault(); //prevents the form from submitting 
-
-  let inputStart = document.getElementById('start-city').value; //lines 17-19: grabbing  user input values and assigning them to variables 
-  let inputEnd = document.getElementById('end-city').value; 
-  let inputStop = document.getElementById('stop-city').value; 
- 
-
-  document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
-
-  console.log('Added:' , startCity); //console logging array values 
-  console.log('Added:', endCity); 
-  
-
-  // let selectedStart = document.querySelector('createcontainer'); do we want to have selected cities for start, end, stop in appear on the page?
-  // selectedStart.textContent = (startCity); 
-
-
+    )});
 }
-
-
-
-
 /*
 function createWeatherCard(cityIndex, time) {
     var city = citiesArray[cityIndex];
@@ -267,4 +241,4 @@ function getLegsWeather(result) {
 
     //total = total / 1000;
     // document.getElementById("total").innerHTML = total + " km";
-};
+}
