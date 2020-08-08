@@ -113,6 +113,7 @@ function returnCurrentWeather(coordinates) {
 };
  citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches")) || [];
 
+
 /////////////////////CLICK EVENTS FOR WEATHER//////////////////////////////
 
 //  EVENT FOR ROUTE BUTTON //
