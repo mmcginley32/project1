@@ -7,7 +7,7 @@ var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
 function returnCurrentWeather(coordinates) {
-    let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;;
+    let queryURL = `https://api.openweathermap.org/data/2.5/forcast?q=${city},${country}&mode=json&units=imperial&APPID=${apiKey}`;;
 
     $.get(queryURL).then(function(response){
         let currTime = new Date(response.dt*1000);
@@ -115,7 +115,7 @@ $("#add").click(function(event) {
     if (stop !== "") {
         citiesArray.push(stop);
     } else {
-        return alert("You are missing a starting city!")
+        return alert("You are missing a city to stop in!")
     }
 
     document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
@@ -172,15 +172,15 @@ function displayRoute(origin, destination, service, display) {
         destination: destination,
         waypoints: stops,
         // [
-        //   {
-        //     location: "Golden, US"
-        //   },
-        //   {
-        //     location: "Idaho Springs, US"
-        //   },
-            // {
-            //     location: "Denver, US"
-            // }
+        //     {
+        //         location: "Golden, US"
+        //     },
+        //     {
+        //         location: "Idaho Springs, US"
+        //     },
+        //     {
+        //         location: "Denver, US"
+        //     }
         // ],
         travelMode: google.maps.TravelMode.DRIVING,
         avoidTolls: true
