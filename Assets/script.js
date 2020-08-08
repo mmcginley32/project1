@@ -158,27 +158,6 @@ function createWeatherCard(cityIndex, time) {
 
 
 
-// //code functionality that will execute once the route or add stop buttons are clicked 
-// let addStart = (ev) => {
-//   ev.preventDefault(); //prevents the form from submitting 
-
-//   let inputStart = document.getElementById('start-city').value; //grabbing  user input values and assigning them to variables 
-//   let inputEnd = document.getElementById('end-city').value; 
-//   let inputStop = document.getElementById('stop-city').value; 
- 
-
-//   document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
-
-//   console.log('Added:' , startCity); //console logging array values 
-//   console.log('Added:', endCity); 
-  
-
-//   // let selectedStart = document.querySelector('createcontainer'); do we want to have selected cities for start, end, stop in appear on the page?
-//   // selectedStart.textContent = (startCity); 
-// }
-
-
-
 /////////////////////CLICK EVENT FOR GOOGLE MAPS//////////////////////////
 
 $("#route").click(function(event) {
