@@ -121,10 +121,9 @@ function stopCurrentWeather(api) {
 $(".btn-primary").click(function() {
   event.preventDefault();
 
-  //creating variables to pull in start/end city input  
+  //creating variables to pull in start/end city input ///////////////////ADD IF/ELSE FOR EMPTY VALUES///////////////////
   cityName = $("#start-city").val();
   cityName2 = $("#end-city").val();
-
   startCurrentWeather(cityName, cityName2);
   endCurrentWeather(cityName3);
   // citiesArray.push(cityName, cityName2); 
@@ -149,13 +148,13 @@ $(".btn-secondary").click(function() {
 
 ////////////// FUNCTION FOR WEATHER CARD //////////////////////////
 
-// function createWeatherCard(cityIndex, time) {
-//     var city = citiesArray[cityIndex];
-//     returnCurrentWeather(city);
-//     var card = document.createElement("<div>").setAttribute("card");
-//     div.textContent = city;
-//     tbody.appendChild(card);
-// };
+function createWeatherCard(cityIndex, time) {
+    var city = citiesArray[cityIndex];
+    returnCurrentWeather(city);
+    var card = document.createElement("<div>").setAttribute("card");
+    div.textContent = city;
+    tbody.appendChild(card);
+};
 
 
 
