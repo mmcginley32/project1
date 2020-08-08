@@ -183,7 +183,7 @@ function getLegsWeather(result) {
 
 
     // Get weather for starting city here ****
-    createWeatherCard(startCity);
+    returnCurrentWeather(startCity);
 
     for (let i = 0; i < legs.length; i++) {
         let leg = legs[i];
@@ -234,7 +234,7 @@ function getLegsWeather(result) {
 
         //get weather and create the card for stopCity at hrOfTheDay here ******
         
-        createWeatherCard(stopCity,hrOfTheDay);
+        returnCurrentWeather(stopCity,hrOfTheDay);
         
 
         // add 1 hr to time for stop
