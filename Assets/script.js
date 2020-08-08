@@ -6,7 +6,7 @@ var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
 function returnCurrentWeather(cityName) {
-    let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},US&units=imperial&APPID=${apiKey}`;
+    let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},us&units=imperial&APPID=${apiKey}`;
 
     $.get(queryURL).then(function(response){
         let currTime = new Date(response.dt*1000);
@@ -18,7 +18,7 @@ function returnCurrentWeather(cityName) {
         <p>Humidity: ${response.main.humidity}%</p>
         <p>Wind Speed: ${response.wind.speed} m/s</p>
         `
-    );
+        );
     });
 }
 
@@ -243,4 +243,4 @@ function getLegsWeather(result) {
 
     //total = total / 1000;
     // document.getElementById("total").innerHTML = total + " km";
-};
+}
