@@ -3,9 +3,9 @@ const apiKey = "0765d126b0f6a7eb158764d733ae5823";
 
 
 //create variables that bring in city values selected by user 
-let startCity = $("#start-city"); 
-let endCity = $("#end-city"); 
-let stopCity =$("#stop-city");
+// let startCity = $("#start-city"); 
+// let endCity = $("#end-city"); 
+// let stopCity =$("#stop-city");
 // console.log(startCity, endCity, stopCity); 
 
 
@@ -16,41 +16,71 @@ let stopCity =$("#stop-city");
 // var citiesArray = ["startCity", "endCity", "stopCity"];
 // console.log(citiesArray); 
 
+var citiesArray = []; 
 
-// Click event for route button /changed target to updated class name for this specific button 
+
+// Click event for route button 
 $(".btn-primary").click(function() {
   event.preventDefault();
   let cityName = $("#start-city").val();
   let cityName2 = $("#end-city").val();
   returnCurrentWeather(cityName, cityName2);
-  console.log(cityName, cityName2); 
+  citiesArray.push(cityName, cityName2); 
+  console.log("Array:", citiesArray);
+  // console.log("Start City:", cityName, "End City:", cityName2); 
 });
 
-// Click event for route button /changed target to updated class name for this specific button 
+// Click event for add-stop button 
 $(".btn-secondary").click(function() {
   event.preventDefault();
   let cityName3 = $("#stop-city").val();
-  returnCurrentWeather(cityName3);
-  console.log(cityName3); 
+  // use another api to get lat and lon based on city user typed
+  let test = {lat: "34", lon: "-118"} //dummy variable
+  // returnCurrentWeather(test);
+   returnCurrentWeather(cityName3);
+   citiesArray.push(cityName3);
+   console.log("Array:", citiesArray);
+  //  console.log("Stop-in City:", cityName3); 
+  //  console.log("lat & lon:", test);
+  
 });
 
-
-function returnCurrentWeather(coordinates) {
-  let queryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`;
-
+//do we need to have three calls here -- one for start, end and stop? 
+function returnCurrentWeather(coordinates) { 
+  let queryURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' & coordinates.lat & coordinates.lon & 'appid=' & apiKey; 
+    // let queryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&APPID=${apiKey}`; //replace this queryURL not getting useful data 
+ 
  $.get(queryURL).then(function(response){
+    console.log("Response:", response); 
      let currTime = new Date(response.dt*1000);
-     let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
+    //  let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`; //need another API call to call in weather 
 
      currWeatherDiv.html(`
      <h2>${response.name}, ${response.sys.country} (${currTime.getMonth()+1}/${currTime.getDate()}/${currTime.getFullYear()})<img src=${weatherIcon} height="70px"></h2>
      <p>Temperature: ${response.main.temp} &#176;C</p>
      `)
-     createHistoryButton(response.name);
+     createHistoryButton(response.name); //make function for this
+     
+     
  })
 };
  citiesArray = JSON.parse(localStorage.getItem("localWeatherSearches")) || [];
 
+
+
+ // function searchTrip(weatherAPI) {
+      // var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityAPI + '&appid=' + apiKEY;
+//    var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + startAPI + '&' + endCity + '&' + stopAPI + '&appid=ce3b9593e61b336933f1777b5554991c';
+
+// $.ajax ({
+//     url: queryURL,
+//     method: "GET"
+//   }).then(function(response) {
+//     console.log(response);
+//     $("#end-city").text(JSON.stringify(response)); 
+
+//   }); 
+// };
 
 
 
@@ -154,7 +184,7 @@ function returnCurrentWeather(coordinates) {
 // }
 
 
-// //add event listener for route and passing through the function addStart
+// //add event listener for route and passing through the function addStart JavaScript Method
 // document.addEventListener('DOMContentLoaded', ()=> {
 //   document.getElementById('route').addEventListener('click', addStart);
 // });
@@ -164,7 +194,8 @@ function returnCurrentWeather(coordinates) {
 //   document.getElementById('add').addEventListener('click', addStart);
 // });
 
-//add event 
+
+//add event  jQuery method
 // $('.btn-primary').on('click', function() {
 //   var startAPI = $('#start-city').val(); 
 //   var endAPI = $('#end-city').val(); 
@@ -172,7 +203,6 @@ function returnCurrentWeather(coordinates) {
 //   searchTrip (startAPI, endAPI,stopAPI); 
 //   console.log(startAPI, endCity, stopAPI); 
 // });
-
 
 // already have function --- keep in case needed  
 
