@@ -1,13 +1,12 @@
 
 const apiKey = "b7aeb306de9a1d1d11c8363f3b0a0a25";
 var currWeatherDiv = $("#table");
-// var forecastDiv = $("#");
 var citiesArray = JSON.parse(localStorage.getItem("citiesArray")) || [];
 var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
-function returnCurrentWeather(coordinates) {
-    let queryURL = `https://api.openweathermap.org/data/2.5/forcast?q=${city},${country}&mode=json&units=imperial&APPID=${apiKey}`;;
+function returnCurrentWeather(cityName) {
+    let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},US&units=imperial&APPID=${apiKey}`;
 
     $.get(queryURL).then(function(response){
         let currTime = new Date(response.dt*1000);
@@ -15,55 +14,16 @@ function returnCurrentWeather(coordinates) {
 
         currWeatherDiv.html(`
         <h2>${response.name}, ${response.sys.country} (${currTime.getMonth()+1}/${currTime.getDate()}/${currTime.getFullYear()})<img src=${weatherIcon} height="70px"></h2>
-        <p>Temperature: ${response.main.temp} &#176;C</p>
-        `)
-        createHistoryButton(response.name);
-    })
-};
-    
-
-//code functionality that will execute once the route or add stop buttons are clicked 
-let addStart = (ev) => {
-  ev.preventDefault(); //prevents the form from submitting 
-
-  let inputStart = document.getElementById('start-city').value; //lines 17-19: grabbing  user input values and assigning them to variables 
-  let inputEnd = document.getElementById('end-city').value; 
-  let inputStop = document.getElementById('stop-city').value; 
- 
-
-  document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
-
-  console.log('Added:' , startCity); //console logging array values 
-  console.log('Added:', endCity); 
-  
-
-  // let selectedStart = document.querySelector('createcontainer'); do we want to have selected cities for start, end, stop in appear on the page?
-  // selectedStart.textContent = (startCity); 
-
-
+        <p>Temperature: ${response.main.temp} &#176;F</p>
+        <p>Humidity: ${response.main.humidity}%</p>
+        <p>Wind Speed: ${response.wind.speed} m/s</p>
+        `
+    );
+    });
 }
 
 
-// //add event listener for route and passing through the function addStart
-// document.addEventListener('DOMContentLoaded', ()=> {
-//   document.getElementById('route').addEventListener('click', addStart);
-// });
-
-// //add event listener for add and passing through the function addStart
-// document.addEventListener('DOMContentLoaded', ()=> {
-//   document.getElementById('add').addEventListener('click', addStart);
-// });
-
-//add event 
-// $('.btn-primary').on('click', function() {
-//   var startAPI = $('#start-city').val(); 
-//   var endAPI = $('#end-city').val(); 
-//   var stopAPI = $('#stop-city').val(); 
-//   searchTrip (startAPI); 
-//   console.log(startAPI, endCity, stopAPI); 
-// });
-
-
+/*
 function createWeatherCard(cityIndex, time) {
     var city = citiesArray[cityIndex];
     returnCurrentWeather(city);
@@ -71,10 +31,9 @@ function createWeatherCard(cityIndex, time) {
     div.textContent = city;
     tbody.appendChild(card);
 };
+*/
 
 
-//returnCurrentWeather("Toronto");
-//returnSearchTrip("Toronto");
 
 $("#route").click(function(event) {
     event.preventDefault();
@@ -104,6 +63,7 @@ $("#route").click(function(event) {
     document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
 
     initMap();
+    
 });
 
 $("#add").click(function(event) {
@@ -223,7 +183,7 @@ function getLegsWeather(result) {
 
 
     // Get weather for starting city here ****
-
+    createWeatherCard(startCity);
 
     for (let i = 0; i < legs.length; i++) {
         let leg = legs[i];
@@ -274,7 +234,7 @@ function getLegsWeather(result) {
 
         //get weather and create the card for stopCity at hrOfTheDay here ******
         
-        
+        createWeatherCard(stopCity,hrOfTheDay);
         
 
         // add 1 hr to time for stop
@@ -283,6 +243,4 @@ function getLegsWeather(result) {
 
     //total = total / 1000;
     // document.getElementById("total").innerHTML = total + " km";
-}
-
-// 0d67df869da6450e2d0d3147f8e85294701ac392
+};
