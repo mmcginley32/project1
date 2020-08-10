@@ -6,6 +6,9 @@ var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
 function getCurrentWeather(cityName, hr) {
+    console.log('hr: ', hr);
+    console.log('cityName: ', cityName);
+
     let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},us&units=imperial&APPID=${apiKey}`;
     console.log('queryURL: ', queryURL);
 
@@ -23,24 +26,41 @@ function getCurrentWeather(cityName, hr) {
             url: queryURL,
             method: "GET",
         }).then(function(res) {
+            console.log('res: ', res);
             
-            createWeatherCard(response, hr);
+            createWeatherCard(res, cityName, hr);
         
 
         });
     });
 }
 
-function createWeatherCard(response, hr) {
-    let currTime = new Date(response.dt*1000);
+function createWeatherCard(response, cityName, hr) {
+    console.log('createWeatherCard hr: ', hr);
+    let hourly = response.hourly;
+    let currTime = "";
+    let hour = {};
+    for (i=0; i < hourly.length; i++) {
+        currTime = moment(hourly[i].dt*1000);
+        // console.log('currTime: ', currTime);
+        curHr = currTime.format("HH");
+        // console.log('curHr: ', curHr);
+        if (curHr === hr) {
+            hour = hourly[i];
+            break;
+        }
+    }
+    
     console.log('currTime: ', currTime);
-    let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
+    let weatherIcon = `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`;
     let currWeatherDiv = $("<div>");
     currWeatherDiv.html(`
-        <h2>${response.name}, ${response.sys.country} (${currTime.getMonth()+1}/${currTime.getDate()}/${currTime.getFullYear()})<img src=${weatherIcon} height="70px"></h2>
-        <p>Temperature: ${response.main.temp} &#176;F</p>
-        <p>Humidity: ${response.main.humidity}%</p>
-        <p>Wind Speed: ${response.wind.speed} m/s</p>
+        <h2 style="text-align: center;">${cityName} <img src=${weatherIcon} height="70px"></h2>
+        <p style="text-align: center; font-weight: bold;">${currTime.format('LLL')}</p>
+        <p style="text-align: center; text-transform: capitalize; font-family: 'Georgia','Times'; color: green">${hour.weather[0].description}</p>
+        <p style="text-align: center;">Temperature: ${hour.temp} &#176;F</p>
+        <p style="text-align: center;">Humidity: ${hour.humidity}%</p>
+        <p style="text-align: center;">Wind Speed: ${hour.wind_speed} mph</p>
         <hr>
         `
     );
@@ -49,7 +69,6 @@ function createWeatherCard(response, hr) {
 
     $("#table").append(currWeatherDiv);
 };
-
 
 
 $("#route").click(function(event) {
@@ -204,7 +223,8 @@ function getLegsWeather(result) {
     localStorage.setItem("startCity", startCity);
 
     // Get weather for starting city here ****
-    getCurrentWeather(startCity);
+    console.log('startTime.format("HH"): ', startTime.format("HH"));
+    getCurrentWeather(startCity, startTime.format("HH"));
 
     // reset citiesArray for adding current cities
     resetStops();
@@ -237,9 +257,9 @@ function getLegsWeather(result) {
         console.log('min: ', min);
 
         // add time to starting time to get time when stop will be hit
-        let curTime = moment(startTime).add(min, 'm');
+        let curTime = startTime.add(min, 'm');
         console.log('curTime: ', curTime);
-        hrOfTheDay = moment(curTime).format("LT").split(":")[0];
+        hrOfTheDay = curTime.format('HH');
         console.log('hrOfTheDay: ', hrOfTheDay);
         
         //get city name from leg
