@@ -1,33 +1,55 @@
 
 const apiKey = "b7aeb306de9a1d1d11c8363f3b0a0a25";
-var currWeatherDiv = $("#table");
+
 var citiesArray = JSON.parse(localStorage.getItem("citiesArray")) || [];
 var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
-function getCurrentWeather(cityName) {
+function getCurrentWeather(cityName, hr) {
     let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},us&units=imperial&APPID=${apiKey}`;
+    console.log('queryURL: ', queryURL);
 
     $.get(queryURL).then(function(response){
         console.log(response);
-        let currTime = new Date(response.dt*1000);
-        let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
 
+        // get longitude and latitude for 2nd call
+        var latitude = response.coord.lat;
+        var longitude = response.coord.lon;
+        // 2nd call to get 5 day forcast
+        let queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&units=imperial&appid=" + apiKey;
+        console.log("queryURL", queryURL)
+        $.ajax({
+            async: false,
+            url: queryURL,
+            method: "GET",
+        }).then(function(res) {
+            
+            createWeatherCard(response, hr);
         
+
+        });
     });
 }
 
-
-function createWeatherCard(cityIndex, time) {
-    
+function createWeatherCard(response, hr) {
+    let currTime = new Date(response.dt*1000);
+    console.log('currTime: ', currTime);
+    let weatherIcon = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
+    let currWeatherDiv = $("<div>");
     currWeatherDiv.html(`
         <h2>${response.name}, ${response.sys.country} (${currTime.getMonth()+1}/${currTime.getDate()}/${currTime.getFullYear()})<img src=${weatherIcon} height="70px"></h2>
         <p>Temperature: ${response.main.temp} &#176;F</p>
         <p>Humidity: ${response.main.humidity}%</p>
         <p>Wind Speed: ${response.wind.speed} m/s</p>
+        <hr>
         `
     );
+    
+    currWeatherDiv.attr("style","background-color: lightskyblue")
+
+    $("#table").append(currWeatherDiv);
 };
+
 
 
 $("#route").click(function(event) {
@@ -152,7 +174,7 @@ function displayRoute(origin, destination, service, display) {
 }
 
 function pullCity(str) {
-    let city = str.match(/[\w ]*\, \w{2}[ ,]/); // look for "city, ST," or "city, ST "
+    let city = str.match(/[^ ][a-zA-Z ]*\, [a-zA-Z]{2}[ ,]/); // look for "city, ST," or "city, ST "
     console.log('city: ', city);
     city = city[0].match(/[\w ]*\, \w{2}/)[0]; // trim to just "city, ST" for weather search
     console.log('city: ', city);
@@ -163,6 +185,7 @@ function resetStops() {
     // reset citiesArray for adding current city
     citiesArray = [];
     localStorage.removeItem("citiesArray");
+    $("#table").empty();
 }
 
 function getLegsWeather(result) {
