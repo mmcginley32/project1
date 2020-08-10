@@ -5,9 +5,11 @@ var citiesArray = JSON.parse(localStorage.getItem("citiesArray")) || [];
 var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
-function getCurrentWeather(cityName, hr) {
+function getHoursWeather(cityName, hr, dayOfMonth, id) {
     console.log('hr: ', hr);
     console.log('cityName: ', cityName);
+    // let name = cityName.replaceAll(" ", "").toLowerCase(); // remove spaces from name
+    // let name = cityName.toLowerCase(); // remove spaces from name
 
     let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},us&units=imperial&APPID=${apiKey}`;
     console.log('queryURL: ', queryURL);
@@ -22,20 +24,20 @@ function getCurrentWeather(cityName, hr) {
         let queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&units=imperial&appid=" + apiKey;
         console.log("queryURL", queryURL)
         $.ajax({
-            async: false,
+            // async: false,
             url: queryURL,
             method: "GET",
         }).then(function(res) {
             console.log('res: ', res);
             
-            createWeatherCard(res, cityName, hr);
-        
-
+            fillInWeatherCard(res, cityName, hr, dayOfMonth, id);
         });
     });
 }
 
-function createWeatherCard(response, cityName, hr) {
+function fillInWeatherCard(response, cityName, hr, dayOfMonth, id) {
+    // fill in the weather cards with the weather data
+
     console.log('createWeatherCard hr: ', hr);
     let hourly = response.hourly;
     let currTime = "";
@@ -43,9 +45,10 @@ function createWeatherCard(response, cityName, hr) {
     for (i=0; i < hourly.length; i++) {
         currTime = moment(hourly[i].dt*1000);
         // console.log('currTime: ', currTime);
-        curHr = currTime.format("HH");
+        let curHr = currTime.format("HH");
+        let curDay = currTime.format("D");
         // console.log('curHr: ', curHr);
-        if (curHr === hr) {
+        if (curHr === hr && curDay === dayOfMonth) {
             hour = hourly[i];
             break;
         }
@@ -53,42 +56,109 @@ function createWeatherCard(response, cityName, hr) {
     
     console.log('currTime: ', currTime);
     let weatherIcon = `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`;
+    
+    // add data to weather card
+    $(`#icon-${id}`).attr("src",weatherIcon);
+    $(`#date-${id}`).text(currTime.format('LLL'))
+    $(`#desc-${id}`).text(hour.weather[0].description);
+    $(`#temp-${id}`).text(`Temperature: ${hour.temp} \xB0F`);
+    $(`#hum-${id}`).text(`Humidity: ${hour.humidity}%`);
+    $(`#wind-${id}`).text(`Wind Speed: ${hour.wind_speed} mph`);
+
+    // currWeatherDiv.html(`
+    //     <h2 style="text-align: center;">${cityName} <img src=${weatherIcon} height="70px"></h2>
+    //     <p style="text-align: center; font-weight: bold;">${currTime.format('LLL')}</p>
+    //     <p style="text-align: center; text-transform: capitalize; font-family: 'Georgia','Times'; color: green">
+    //     <span style="background-color: white;">  ${hour.weather[0].description}  </span>
+    //     </p>
+    //     <p style="text-align: center;">Temperature: ${hour.temp} &#176;F</p>
+    //     <p style="text-align: center;">Humidity: ${hour.humidity}%</p>
+    //     <p style="text-align: center;">Wind Speed: ${hour.wind_speed} mph</p>
+    //     <hr>
+    //     `
+    // );
+    
+    // currWeatherDiv.attr("style","background-color: lightskyblue")
+
+    // $("#table").append(currWeatherDiv);
+    // // weatherCards[cityName] = currWeatherDiv;
+};
+
+function createWeatherCard(cityName,id) {
+    console.log('creating card for: ', cityName);
+    console.log('id: ', id);
+    /* create the weather cards HTML here to be filled in later when the data
+     comes in so that everything will be in the proper order. */
+
+    // id vars
+    const icon = `icon-${id}`;
+    const td = `date-${id}`;
+    const desc = `desc-${id}`;
+    const temp = `temp-${id}`;
+    const hum = `hum-${id}`;
+    const wind = `wind-${id}`;
+
     let currWeatherDiv = $("<div>");
+
+    // create card with city name and ids
     currWeatherDiv.html(`
-        <h2 style="text-align: center;">${cityName} <img src=${weatherIcon} height="70px"></h2>
-        <p style="text-align: center; font-weight: bold;">${currTime.format('LLL')}</p>
-        <p style="text-align: center; text-transform: capitalize; font-family: 'Georgia','Times'; color: green">${hour.weather[0].description}</p>
-        <p style="text-align: center;">Temperature: ${hour.temp} &#176;F</p>
-        <p style="text-align: center;">Humidity: ${hour.humidity}%</p>
-        <p style="text-align: center;">Wind Speed: ${hour.wind_speed} mph</p>
+        <h2 style="text-align: center;">${cityName} <img id="${icon}" height="70px"></h2>
+        <p id="${td}" style="text-align: center; font-weight: bold;"></p>
+        <p style="text-align: center; text-transform: capitalize; font-family: 'Georgia','Times'; color: green">
+        <span id="${desc}" style="background-color: white;"></span>
+        </p>
+        <p id="${temp}" style="text-align: center;"></p>
+        <p id="${hum}" style="text-align: center;"></p>
+        <p id="${wind}"style="text-align: center;"></p>
         <hr>
         `
     );
     
-    currWeatherDiv.attr("style","background-color: lightskyblue")
+    currWeatherDiv.attr("style","background-color: lightskyblue"); //color the card light blue
 
-    $("#table").append(currWeatherDiv);
-};
+    $("#table").append(currWeatherDiv); //append it in
+}
 
+function pullCity(str) {
+    let city = str.match(/[\w]+[ \w]*\, [\w]{2}[ ,]/); // look for "city, ST," or "city, ST "
+    console.log('city: ', city);
+    city = city[0].match(/[\w ]*\, \w{2}/)[0]; // trim to just "city, ST" for weather search
+    console.log('city: ', city);
+    return city;
+}
 
-$("#route").click(function(event) {
+function resetStops() {
+    // reset citiesArray for adding current city
+    citiesArray = [];
+    localStorage.removeItem("citiesArray");
+    $("#table").empty();
+}
+
+// function sleep(ms) {
+//     return new Promise(resolve => setTimeout(resolve, ms));
+//   }
+
+$("#route").click( function(event) {
     event.preventDefault();
+    event.stopPropagation();
 
     // set starting city
     var cityName = $("#start-city").val();
-    console.log('startCity: ', startCity);
+    console.log('ROUTING ****** startCity: ', startCity);
 
     // set ending city
     var cityName2 = $("#end-city").val();
     console.log('endCity: ', endCity);
     if (cityName !== "") {
         startCity = cityName;
+        localStorage.setItem("startCity", startCity);
     } else {
         return alert("You are missing a starting city!")
     }
 
     if (cityName2 !== "") {
         endCity = cityName2;
+        localStorage.setItem("endCity", endCity);
     } else {
         return alert("You are missing an ending city!")
     }
@@ -104,8 +174,10 @@ $("#route").click(function(event) {
 
 $("#add").click(function(event) {
     event.preventDefault();
+    event.stopPropagation();
+
     let stop = $("#stop-city").val();
-    console.log('stop: ', stop);
+    console.log('ADDING ****** stop: ', stop);
     
     // make sure stop is not blank and save it 
     if (stop !== "") {
@@ -114,7 +186,7 @@ $("#add").click(function(event) {
         return alert("You are missing a city to stop in!")
     }
 
-    document.querySelector('form').reset(); //reset/clear the form for the next selected cities 
+    document.querySelector('.stops-form').reset(); //reset/clear the form for the next selected cities 
 
     // redraw the map with the new stop
     initMap();
@@ -192,27 +264,15 @@ function displayRoute(origin, destination, service, display) {
     );
 }
 
-function pullCity(str) {
-    let city = str.match(/[^ ][a-zA-Z ]*\, [a-zA-Z]{2}[ ,]/); // look for "city, ST," or "city, ST "
-    console.log('city: ', city);
-    city = city[0].match(/[\w ]*\, \w{2}/)[0]; // trim to just "city, ST" for weather search
-    console.log('city: ', city);
-    return city;
-}
-
-function resetStops() {
-    // reset citiesArray for adding current city
-    citiesArray = [];
-    localStorage.removeItem("citiesArray");
-    $("#table").empty();
-}
-
 function getLegsWeather(result) {
     console.log('result in getLegsWeather: ', result);
+    
+    // reset citiesArray for adding current cities
+    resetStops();
 
     let startTime = moment();
     console.log('startTime: ', startTime);
-    
+    var dayOfMonth = startTime.format('D');
 
     const legs = result.routes[0].legs;
     console.log('legs: ', legs);
@@ -223,12 +283,13 @@ function getLegsWeather(result) {
     localStorage.setItem("startCity", startCity);
 
     // Get weather for starting city here ****
-    console.log('startTime.format("HH"): ', startTime.format("HH"));
-    getCurrentWeather(startCity, startTime.format("HH"));
+    console.log('startTime.format("D"): ', startTime.format("HH"));
 
-    // reset citiesArray for adding current cities
-    resetStops();
+    createWeatherCard(startCity, 0);
+    getHoursWeather(startCity, startTime.format("HH"),dayOfMonth, 0);
+    // await sleep(5000);
 
+    // loop through legs of the trip getting weather for the citys at the end of the legs
     for (let i = 0; i < legs.length; i++) {
         let leg = legs[i];
 
@@ -261,7 +322,8 @@ function getLegsWeather(result) {
         console.log('curTime: ', curTime);
         hrOfTheDay = curTime.format('HH');
         console.log('hrOfTheDay: ', hrOfTheDay);
-        
+        dayOfMonth = curTime.format('D');
+
         //get city name from leg
         let stopCity = pullCity(leg.end_address);
 
@@ -277,12 +339,31 @@ function getLegsWeather(result) {
         }
 
         //get weather and create the card for stopCity at hrOfTheDay here ******
-        getCurrentWeather(stopCity,hrOfTheDay);
-        
+        createWeatherCard(stopCity, i + 1);
+        getHoursWeather(stopCity, hrOfTheDay,dayOfMonth, i + 1);
+        // await sleep(1000);
 
         // add 1 hr to time for stop
         min += 60;
     }
+
+    // append weather cards in order
+    // append start city
+    // while (weatherCards[startCity] === undefined) {await sleep(100);}
+    // $("#table").append(weatherCards[startCity]);
+    // console.log('weatherCards[' + startCity + ']: ', weatherCards[startCity]);
+    
+    // // append stops
+    // for (i=0; i<citiesArray.length; i++) {
+    //     while (weatherCards[citiesArray[i]] === undefined) {await sleep(100);}
+    //     $("#table").append(weatherCards[citiesArray[i]]);
+    //     console.log('weatherCards[' + citiesArray[i] + ']: ', weatherCards[citiesArray[i]]);
+    // }
+
+    // // append end city
+    // while (weatherCards[endCity] === undefined) {await sleep(100);}
+    // $("#table").append(weatherCards[endCity]);
+    // console.log('weatherCards[' + endCity + ']: ', weatherCards[endCity]);
 
     //total = total / 1000;
     // document.getElementById("total").innerHTML = total + " km";
