@@ -114,7 +114,7 @@ function createWeatherCard(cityName,id) {
         `
     );
     
-    currWeatherDiv.attr("style","background-color: lightskyblue"); //color the card light blue
+    currWeatherDiv.attr("style","background-color: lightskyblue; "); //color the card light blue
 
     $("#table").append(currWeatherDiv); //append it in
 }
@@ -302,32 +302,31 @@ function getLegsWeather(result) {
 
         // seperate time into days hours and mins for calculating time in minutes to 
         // figure out time of day the leg will be finished
-        if (time.length > 4) {
-            days = parseInt(time[0]); 
-            hrs = parseInt(time[2]);
-            min += 24*60*days + 60*hrs + parseInt(time[4]);
-        } else if (time.length === 4) {
-            hrs = parseInt(time[0]);
-            min += 60*hrs + parseInt(time[2]);
+        for (t = 0; t < time.length; t += 2)
+        if (time[t+1].match("day")) {
+            days = parseInt(time[t]); //get number of days for leg
+        } else if (time[t+1].match("hour")) {
+            hrs = parseInt(time[t]); //get number of hours for leg
         } else {
-            min += parseInt(time[0]);
+            min += parseInt(time[t]); //get number of minutes for leg added to the current minutes
         }
-        
+
+        min += 24*60*days + 60*hrs; //add days and hours to miniutes for total minutes
         console.log('days: ', days);
         console.log('hrs: ', hrs);
         console.log('min: ', min);
 
         // add time to starting time to get time when stop will be hit
-        let curTime = startTime.add(min, 'm');
+        let curTime = startTime.add(min, 'm'); //add minutes to time
         console.log('curTime: ', curTime);
-        hrOfTheDay = curTime.format('HH');
+        hrOfTheDay = curTime.format('HH'); // get hour
         console.log('hrOfTheDay: ', hrOfTheDay);
-        dayOfMonth = curTime.format('D');
+        dayOfMonth = curTime.format('D'); // get day of the month
 
         //get city name from leg
         let stopCity = pullCity(leg.end_address);
 
-        // might want to revise local storage here instead of after it's entered so that dragged to citys will be updated
+        // update variable city names and local storage here so that dragged to citys will be updated
         if (i === legs.length-1) {
             //save end city
             endCity = stopCity;
