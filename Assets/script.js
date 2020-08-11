@@ -5,133 +5,23 @@ var citiesArray = JSON.parse(localStorage.getItem("citiesArray")) || [];
 var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
-function getHoursWeather(cityName, hr, dayOfMonth, id) {
-    console.log('hr: ', hr);
-    console.log('cityName: ', cityName);
-    // let name = cityName.replaceAll(" ", "").toLowerCase(); // remove spaces from name
-    // let name = cityName.toLowerCase(); // remove spaces from name
 
-    let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},us&units=imperial&APPID=${apiKey}`;
-    console.log('queryURL: ', queryURL);
-
-    $.get(queryURL).then(function (response) {
-        console.log(response);
-
-        // get longitude and latitude for 2nd call
-        var latitude = response.coord.lat;
-        var longitude = response.coord.lon;
-        // 2nd call to get 5 day forcast
-        let queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&units=imperial&appid=" + apiKey;
-        console.log("queryURL", queryURL)
-        $.ajax({
-            // async: false,
-            url: queryURL,
-            method: "GET",
-        }).then(function (res) {
-            console.log('res: ', res);
-
-            fillInWeatherCard(res, cityName, hr, dayOfMonth, id);
-        });
-    });
-}
-
-function fillInWeatherCard(response, cityName, hr, dayOfMonth, id) {
-    // fill in the weather cards with the weather data
-
-    console.log('createWeatherCard hr: ', hr);
-    let hourly = response.hourly;
-    let currTime = "";
-    let hour = {};
-    for (i = 0; i < hourly.length; i++) {
-        currTime = moment(hourly[i].dt * 1000);
-        // console.log('currTime: ', currTime);
-        let curHr = currTime.format("HH");
-        let curDay = currTime.format("D");
-        // console.log('curHr: ', curHr);
-        if (curHr === hr && curDay === dayOfMonth) {
-            hour = hourly[i];
-            break;
-        }
-    }
-
-    console.log('currTime: ', currTime);
-    let weatherIcon = `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`;
-
-    // add data to weather card
-    $(`#icon-${id}`).attr("src", weatherIcon);
-    $(`#date-${id}`).text(currTime.format('LLL'))
-    $(`#desc-${id}`).text(hour.weather[0].description);
-    $(`#temp-${id}`).text(`Temperature: ${hour.temp} \xB0F`);
-    $(`#hum-${id}`).text(`Humidity: ${hour.humidity}%`);
-    $(`#wind-${id}`).text(`Wind Speed: ${hour.wind_speed} mph`);
-
-    // currWeatherDiv.html(`
-    //     <h2 style="text-align: center;">${cityName} <img src=${weatherIcon} height="70px"></h2>
-    //     <p style="text-align: center; font-weight: bold;">${currTime.format('LLL')}</p>
-    //     <p style="text-align: center; text-transform: capitalize; font-family: 'Georgia','Times'; color: green">
-    //     <span style="background-color: white;">  ${hour.weather[0].description}  </span>
-    //     </p>
-    //     <p style="text-align: center;">Temperature: ${hour.temp} &#176;F</p>
-    //     <p style="text-align: center;">Humidity: ${hour.humidity}%</p>
-    //     <p style="text-align: center;">Wind Speed: ${hour.wind_speed} mph</p>
-    //     <hr>
-    //     `
-    // );
-
-    // currWeatherDiv.attr("style","background-color: lightskyblue")
-
-    // $("#table").append(currWeatherDiv);
-    // // weatherCards[cityName] = currWeatherDiv;
-};
-
-function createWeatherCard(cityName, id) {
-    console.log('creating card for: ', cityName);
-    console.log('id: ', id);
-    /* create the weather cards HTML here to be filled in later when the data
-     comes in so that everything will be in the proper order. */
-
-    // id vars
-    const icon = `icon-${id}`;
-    const td = `date-${id}`;
-    const desc = `desc-${id}`;
-    const temp = `temp-${id}`;
-    const hum = `hum-${id}`;
-    const wind = `wind-${id}`;
-
-    let currWeatherDiv = $("<div>");
-
-    // create card with city name and ids
-    currWeatherDiv.html(`
-        <h2 style="text-align: center;">${cityName} <img id="${icon}" height="70px"></h2>
-        <p id="${td}" style="text-align: center; font-weight: bold;"></p>
-        <p style="text-align: center; text-transform: capitalize; font-family: 'Georgia','Times'; color: green">
-        <span id="${desc}" style="background-color: white;"></span>
-        </p>
-        <p id="${temp}" style="text-align: center;"></p>
-        <p id="${hum}" style="text-align: center;"></p>
-        <p id="${wind}"style="text-align: center;"></p>
-        <hr>
-        `
-    );
-
-    currWeatherDiv.attr("style", "background-color: lightskyblue; margin: 15px; border-radius: 12px 12px 12px 12px;"); //color the card light blue
-
-    $("#table").append(currWeatherDiv); //append it in
-}
 
 function pullCity(str) {
+    // pull out the city and state from the google addresses 
+
     let city = str.match(/[\w]+[ \w]*\, [\w]{2}[ ,]/); // look for "city, ST," or "city, ST "
     console.log('city: ', city);
-    city = city[0].match(/[\w ]*\, \w{2}/)[0]; // trim to just "city, ST" for weather search
+    city = city[0].match(/[\w ]*\, \w{2}/)[0]; // trim off ending space or comma to just "city, ST" for weather search
     console.log('city: ', city);
     return city;
 }
 
 function resetStops() {
-    // reset citiesArray for adding current city
+    // reset citiesArray variable and local storage for adding current city
     citiesArray = [];
     localStorage.removeItem("citiesArray");
-    $("#table").empty();
+    $("#table").empty(); // clear weather cards
 }
 
 // function sleep(ms) {
@@ -197,8 +87,9 @@ $("#add").click(function (event) {
 //////////////////////// Goggle functions //////////////////////////
 
 function initMap() {
-    console.log('endCity: ', endCity);
-    console.log('startCity: ', startCity);
+    // starts the API process of getting the map
+    // console.log('endCity: ', endCity);
+    // console.log('startCity: ', startCity);
     const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 4,
 
@@ -224,7 +115,7 @@ function initMap() {
 }
 
 function displayRoute(origin, destination, service, display) {
-    // create stops for the map
+    // create inbetween stops/waypoints for the map
     const stops = [];
     for (i = 0; i < citiesArray.length; i++) {
         let cur = {
@@ -287,7 +178,6 @@ function getLegsWeather(result) {
 
     createWeatherCard(startCity, 0);
     getHoursWeather(startCity, startTime.format("HH"), dayOfMonth, 0);
-    // await sleep(5000);
 
     // loop through legs of the trip getting weather for the citys at the end of the legs
     for (let i = 0; i < legs.length; i++) {
@@ -302,32 +192,32 @@ function getLegsWeather(result) {
 
         // seperate time into days hours and mins for calculating time in minutes to 
         // figure out time of day the leg will be finished
-        if (time.length > 4) {
-            days = parseInt(time[0]);
-            hrs = parseInt(time[2]);
-            min += 24 * 60 * days + 60 * hrs + parseInt(time[4]);
-        } else if (time.length === 4) {
-            hrs = parseInt(time[0]);
-            min += 60 * hrs + parseInt(time[2]);
+        for (t = 0; t < time.length; t += 2)
+        if (time[t+1].match("day")) {
+            days = parseInt(time[t]); //get number of days for leg
+        } else if (time[t+1].match("hour")) {
+            hrs = parseInt(time[t]); //get number of hours for leg
         } else {
-            min += parseInt(time[0]);
+            min += parseInt(time[t]); //get number of minutes for leg added to the current minutes
         }
 
-        console.log('days: ', days);
-        console.log('hrs: ', hrs);
-        console.log('min: ', min);
+        min += 24*60*days + 60*hrs; //add days and hours to miniutes for total minutes
+
+        // console.log('days: ', days);
+        // console.log('hrs: ', hrs);
+        // console.log('min: ', min);
 
         // add time to starting time to get time when stop will be hit
-        let curTime = startTime.add(min, 'm');
+        let curTime = startTime.add(min, 'm'); //add minutes to time
         console.log('curTime: ', curTime);
-        hrOfTheDay = curTime.format('HH');
+        hrOfTheDay = curTime.format('HH'); // get hour
         console.log('hrOfTheDay: ', hrOfTheDay);
-        dayOfMonth = curTime.format('D');
+        dayOfMonth = curTime.format('D'); // get day of the month
 
         //get city name from leg
         let stopCity = pullCity(leg.end_address);
 
-        // might want to revise local storage here instead of after it's entered so that dragged to citys will be updated
+        // update variable city names and local storage here so that dragged to citys will be updated
         if (i === legs.length - 1) {
             //save end city
             endCity = stopCity;
@@ -341,30 +231,116 @@ function getLegsWeather(result) {
         //get weather and create the card for stopCity at hrOfTheDay here ******
         createWeatherCard(stopCity, i + 1);
         getHoursWeather(stopCity, hrOfTheDay, dayOfMonth, i + 1);
-        // await sleep(1000);
 
         // add 1 hr to time for stop
         min += 60;
     }
 
-    // append weather cards in order
-    // append start city
-    // while (weatherCards[startCity] === undefined) {await sleep(100);}
-    // $("#table").append(weatherCards[startCity]);
-    // console.log('weatherCards[' + startCity + ']: ', weatherCards[startCity]);
-
-    // // append stops
-    // for (i=0; i<citiesArray.length; i++) {
-    //     while (weatherCards[citiesArray[i]] === undefined) {await sleep(100);}
-    //     $("#table").append(weatherCards[citiesArray[i]]);
-    //     console.log('weatherCards[' + citiesArray[i] + ']: ', weatherCards[citiesArray[i]]);
-    // }
-
-    // // append end city
-    // while (weatherCards[endCity] === undefined) {await sleep(100);}
-    // $("#table").append(weatherCards[endCity]);
-    // console.log('weatherCards[' + endCity + ']: ', weatherCards[endCity]);
-
-    //total = total / 1000;
+     //total = total / 1000;
     // document.getElementById("total").innerHTML = total + " km";
 }
+
+
+//////////////////////// Weather functions //////////////////////////
+
+
+function createWeatherCard(cityName, id) {
+    // console.log('creating card for: ', cityName);
+    // console.log('id: ', id);
+    /* create the weather cards HTML here to be filled in later when the data
+     comes in so that everything will be in the proper order. */
+
+    // create ids for card elements
+    const icon = `icon-${id}`;
+    const td = `date-${id}`;
+    const desc = `desc-${id}`;
+    const temp = `temp-${id}`;
+    const hum = `hum-${id}`;
+    const wind = `wind-${id}`;
+
+    let currWeatherDiv = $("<div>");
+
+    // create card with city name and ids
+    currWeatherDiv.html(`
+        <h2 style="text-align: center;">${cityName} <img id="${icon}" height="70px"></h2>
+        <p id="${td}" style="text-align: center; font-weight: bold;"></p>
+        <p style="text-align: center; text-transform: capitalize; font-family: 'Georgia','Times'; color: green">
+        <span id="${desc}" style="background-color: white;"></span>
+        </p>
+        <p id="${temp}" style="text-align: center;"></p>
+        <p id="${hum}" style="text-align: center;"></p>
+        <p id="${wind}"style="text-align: center;"></p>
+        <hr>
+        `
+    );
+    
+    //add style to the cards
+    currWeatherDiv.attr("style", "background-color: lightskyblue; margin: 15px; border-radius: 12px 12px 12px 12px;"); 
+
+    // append card to table div
+    $("#table").append(currWeatherDiv); 
+}
+
+function getHoursWeather(cityName, hr, dayOfMonth, id) {
+    // make the Weather API calls to get the weather
+
+    let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},us&units=imperial&APPID=${apiKey}`;
+    console.log('queryURL: ', queryURL);
+
+    // first weather query to get longitude and latitude for city
+    $.get(queryURL).then(function(response){
+        // console.log(response);
+
+        // get longitude and latitude for 2nd call
+        var latitude = response.coord.lat;
+        var longitude = response.coord.lon;
+        
+        // 2nd call to get 5 day forcast
+        let queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&units=imperial&appid=" + apiKey;
+        console.log("queryURL", queryURL)
+        
+        $.ajax({
+            // async: false,
+            url: queryURL,
+            method: "GET",
+        }).then(function(res) {
+            console.log('res: ', res);
+            
+            fillInWeatherCard(res, hr, dayOfMonth, id);
+        });
+    });
+}
+
+function fillInWeatherCard(response, hr, dayOfMonth, id) {
+    // fill in the weather cards with the weather data
+
+    console.log('fillInWeatherCard hr: ', hr);
+    let hourly = response.hourly;
+    let currTime = "";
+    let hour = {};
+
+    // look for correct hourly weather data
+    for (i=0; i < hourly.length; i++) {
+        currTime = moment(hourly[i].dt*1000);
+        // console.log('currTime: ', currTime);
+        let curHr = currTime.format("HH");
+        let curDay = currTime.format("D");
+        // console.log('curHr: ', curHr);
+        if (curHr === hr && curDay === dayOfMonth) {
+            hour = hourly[i];
+            break;
+        }
+    }
+    
+    console.log('currTime: ', currTime);
+    // create weather icon link
+    let weatherIcon = `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`;
+    
+    // add weather data to card
+    $(`#icon-${id}`).attr("src",weatherIcon);
+    $(`#date-${id}`).text(currTime.format('LLL'))
+    $(`#desc-${id}`).text(hour.weather[0].description);
+    $(`#temp-${id}`).text(`Temperature: ${hour.temp} \xB0F`);
+    $(`#hum-${id}`).text(`Humidity: ${hour.humidity}%`);
+    $(`#wind-${id}`).text(`Wind Speed: ${hour.wind_speed} mph`);
+};
