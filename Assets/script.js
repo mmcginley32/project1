@@ -125,6 +125,7 @@ function displayRoute(origin, destination, service, display) {
     }
     console.log('stops: ', stops);
 
+
     // get the route with stops
     service.route({
         origin: origin,
@@ -332,15 +333,21 @@ function fillInWeatherCard(response, hr, dayOfMonth, id) {
         }
     }
     
-    console.log('currTime: ', currTime);
-    // create weather icon link
-    let weatherIcon = `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`;
-    
-    // add weather data to card
-    $(`#icon-${id}`).attr("src",weatherIcon);
-    $(`#date-${id}`).text(currTime.format('LLL'))
-    $(`#desc-${id}`).text(hour.weather[0].description);
-    $(`#temp-${id}`).text(`Temperature: ${hour.temp} \xB0F`);
-    $(`#hum-${id}`).text(`Humidity: ${hour.humidity}%`);
-    $(`#wind-${id}`).text(`Wind Speed: ${hour.wind_speed} mph`);
+    if (hour === {}) {
+        console.log("current time is too far out for hourly weather.")
+    } else {
+
+        console.log('currTime: ', currTime);
+        // create weather icon link
+        let weatherIcon = `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`;
+        
+        // add weather data to card
+        $(`#icon-${id}`).attr("src",weatherIcon);
+        $(`#date-${id}`).text(currTime.format('LLL'))
+        $(`#desc-${id}`).text(hour.weather[0].description);
+        $(`#temp-${id}`).text(`Temperature: ${hour.temp} \xB0F`);
+        $(`#hum-${id}`).text(`Humidity: ${hour.humidity}%`);
+        $(`#wind-${id}`).text(`Wind Speed: ${hour.wind_speed} mph`);
+    }
 };
+    
