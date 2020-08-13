@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,10 +12,17 @@
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
     <!-- <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap" rel="stylesheet"> -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <!-- Live key for deployment -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1xprYSpXd0q_yDsJ1W2UGhfl9_YGKU0&callback=initMap&libraries=&v=weekly"
-      defer
-    ></script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBB65lPUf7uvkGoYk_JgjvCCDrN1fB7h4Y&callback=initMap&libraries=&v=weekly"
+        defer></script>
+    
+    <!-- Free Key for testing locally -->
+    <!-- <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb1xprYSpXd0q_yDsJ1W2UGhfl9_YGKU0&callback=initMap&libraries=&v=weekly"
+    defer></script> -->
+
 </head>
 
 <body>
@@ -28,74 +36,26 @@
                     <button type="submit" class="btn btn-primary" id="route">
                         <i class="fas fa-car-side" style="font-size: large;"> Route</i>
                     </button>
+                </div>
+            </form>
+            <form class="form-inline stops-form">
+                <div class="form-group mx-sm-3 mb-2">
                     <input class="form-control" id="stop-city" type="text" placeholder="City Name to stop in">
-                    <button type="submit" class="btn btn-secondary" id="add"> <!--changed class name to trigger event-->
+                    <button type="submit" class="btn btn-primary" id="add">
                         <i class="fas fa-hamburger" style="font-size: large;"> Add Stop</i>
                     </button>
                 </div>
             </form>
         </section>
-        
+
         <div id="map"></div>
-        
-        <div id="table" cellpadding="10" cellspacing="5">
-            <table class="table">
-                <div class="col">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">City</th>
-                            <th scope="col">Time</th>
-                            <th scope="col">Weather</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row"></th>
-                            <td class="1"></td>
-                            <td class="2"></td>
-                            <td class="3"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td class="4"></td>
-                            <td class="5"></td>
-                            <td class="6"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td class="7"></td>
-                            <td class="8"></td>
-                            <td class="9"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td class="10">..</td>
-                            <td class="11">..</td>
-                            <td class="12">..</td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td class="13">..</td>
-                            <td class="14">..</td>
-                            <td class="15">..</td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td class="16">..</td>
-                            <td class="17">..</td>
-                            <td class="18">..</td>
-                        </tr>
-                    </tbody>
-                </div>
-            </table>
+
+        <div id="table">
         </div>
-        <footer></footer>
-    </div>
-    <!--Adding JavaScript Links -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script type="text/javascript" src="assets/script.js"></script>
+        <!--Adding JavaScript Links -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script type="text/javascript" src="./Assets/script.js"></script>
 </body>
 
 </html>
