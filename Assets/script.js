@@ -1,4 +1,3 @@
-////////////////GLOBAL VARIABLES////////////////////
 
 const apiKey = "b7aeb306de9a1d1d11c8363f3b0a0a25";
 
@@ -7,14 +6,6 @@ var startCity = localStorage.getItem("startCity") || "";
 var endCity = localStorage.getItem("endCity") || "";
 
 
-function startCurrentWeather(api) {
-  let queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey; 
-  $.ajax ({
-  url: queryURL,
-  method: "GET"
-}).then(function(response) {
-  $("#start-city").text(JSON.stringify(response)); 
-  console.log('response:', response);
 
 function pullCity(str) {
     // pull out the city and state from the google addresses 
@@ -359,3 +350,4 @@ function fillInWeatherCard(response, hr, dayOfMonth, id) {
         $(`#wind-${id}`).text(`Wind Speed: ${hour.wind_speed} mph`);
     }
 };
+    
