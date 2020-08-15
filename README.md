@@ -1,4 +1,5 @@
 # Weather Trips
+By Jason Tilley, Mason McGinley, Haley Lewis, & Christal Vigil
 
 # Links:
  Git Hub:
